@@ -1,9 +1,16 @@
-async function fetchGoldPrice() {
+async function convertDAUtoUSD() {
+    const dauAmount = document.getElementById('dauInput').value;
+    const loadingMessage = document.getElementById('loading');
+    const resultMessage = document.getElementById('result');
+
+    // Show loading message
+    loadingMessage.style.display = 'block';
+    resultMessage.innerText = ''; // Clear previous result
+
     try {
         const response = await fetch('https://www.goldapi.io/api/XAU/USD', {
-            method: 'GET',
             headers: {
-                'x-access-token': 'goldapi-3qag3sm2b9l6hg-io' // Your API token
+                'x-access-token': 'goldapi-3qag3sm2b9l6hg-io'
             }
         });
 
@@ -12,33 +19,18 @@ async function fetchGoldPrice() {
         }
 
         const data = await response.json();
-        console.log('Gold Price per Ounce:', data.price); // Log the fetched price
-        return data.price; // Assuming the price comes back in a field called "price"
+        const goldPricePerKg = data.price; // Get the gold price per kg
+        const conversionRate = goldPricePerKg; // 1 DAU = 1kg of gold
+        const usdAmount = dauAmount * conversionRate;
+
+        // Format the USD amount
+        const formattedUsdAmount = usdAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+
+        resultMessage.innerText = `${dauAmount} DAU is equal to ${formattedUsdAmount}`;
     } catch (error) {
-        console.error('Failed to fetch gold price:', error);
-        return null; // Return null if there is an error
+        resultMessage.innerText = 'Error fetching price: ' + error.message;
+    } finally {
+        // Hide loading message
+        loadingMessage.style.display = 'none';
     }
 }
-
-async function convertDAUtoUSD() {
-    const dauAmount = document.getElementById('dauInput').value;
-
-    // Fetch the current gold price
-    const conversionRate = await fetchGoldPrice();
-    if (!conversionRate) {
-        document.getElementById('result').innerText = 'Error fetching gold price';
-        return;
-    }
-
-    // Convert from ounces to kilograms
-    const pricePerKg = conversionRate * 35.274; // Conversion factor from ounces to kg
-    const usdAmount = dauAmount * pricePerKg; // Calculate the USD amount
-
-    // Format the USD amount with commas
-    const formattedUSD = usdAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-
-    document.getElementById('result').innerText = `${dauAmount} DAU is equal to ${formattedUSD}`;
-}
-
-// Optional: Add an event listener for the button if you're not using inline onclick in HTML
-document.getElementById('convertButton').addEventListener('click', convertDAUtoUSD);
