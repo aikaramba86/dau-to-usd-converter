@@ -21,14 +21,17 @@ async function fetchGoldPrice() {
 
 async function convertDAUtoUSD() {
     const dauAmount = document.getElementById('dauInput').value; // Get the DAU amount from input
-    const conversionRate = await fetchGoldPrice(); // Fetch current gold price
+    const conversionRatePerOunce = await fetchGoldPrice(); // Fetch current gold price in USD per ounce
 
-    if (conversionRate === null) {
+    if (conversionRatePerOunce === null) {
         document.getElementById('result').innerText = 'Error fetching gold price.';
         return; // Exit the function if there was an error fetching the price
     }
 
-    const usdAmount = dauAmount * conversionRate; // Calculate USD amount
+    // Convert the price from ounces to kilograms (1 kg = 35.274 ounces)
+    const conversionRatePerKg = conversionRatePerOunce * 35.274; // Price for 1 kg of gold
+
+    const usdAmount = dauAmount * conversionRatePerKg; // Calculate USD amount for DAU
     const formattedAmount = usdAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
     document.getElementById('result').innerText = `${dauAmount} DAU is equivalent to ${formattedAmount} USD`; // Display result
