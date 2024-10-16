@@ -21,7 +21,11 @@ async function convertDAUtoUSD() {
         }
 
         const data = await response.json();
-        const goldPricePerKg = data.price; // Price for 1 kg of gold in USD
+        const goldPricePerOunce = data.price; // Price for 1 ounce of gold in USD
+
+        // Calculate the price for 1 kg of gold
+        const ouncesInKg = 35.274; // 1 kg = 35.274 ounces
+        const goldPricePerKg = goldPricePerOunce * ouncesInKg; // Price for 1 kg of gold
 
         // Calculate the equivalent USD amount
         const usdAmount = dauAmount * goldPricePerKg; // 1 DAU = 1 kg of gold
