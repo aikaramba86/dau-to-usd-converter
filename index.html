@@ -3,17 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAU to USD Converter</title>
     <link rel="stylesheet" href="styles.css">
+    <title>DAU to USD Converter</title>
 </head>
 <body>
-    <h1>DAU to USD Converter</h1>
-    <h2 style="font-size: smaller;">1 DAU = 1 KG of Gold</h2>
-    <p style="font-size: smaller; color: gray;">Powered by GoldAPI.io</p>
-    <input type="number" id="dauInput" placeholder="Enter DAU amount" />
-    <button onclick="convertDAUtoUSD()">Convert</button>
-    <div id="loading" style="display:none;">Fetching price...</div>
-    <div id="result"></div>
+    <div class="container">
+        <h1>DAU to USD Converter</h1>
+        <p>Powered by GoldAPI.io</p>
+
+        <div>
+            <label for="dauInput"><strong>Enter DAU:</strong></label>
+            <input type="number" id="dauInput" placeholder="DAU" />
+            <button id="convertDAUButton">Convert to USD</button>
+            <div id="resultDAU"></div> <!-- Result for DAU conversion -->
+        </div>
+
+        <hr> <!-- Separator -->
+
+        <div>
+            <label for="gDAUInput"><strong>Enter gDAU:</strong></label>
+            <input type="number" id="gDAUInput" placeholder="gDAU" />
+            <button id="convertgDAUButton">Convert to USD</button>
+            <div id="resultgDAU"></div> <!-- Result for gDAU conversion -->
+        </div>
+
+        <!-- Loader -->
+        <div id="loading" class="loader" style="display: none;"></div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
