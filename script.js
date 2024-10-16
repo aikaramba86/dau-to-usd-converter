@@ -21,7 +21,7 @@ async function convertDAUtoUSD() {
         }
 
         const data = await response.json();
-        const goldPricePerKg = data.price; // Gold price in USD for 1 kg
+        const goldPricePerKg = data.price; // Price for 1 kg of gold in USD
 
         // Calculate the equivalent USD amount
         const usdAmount = dauAmount * goldPricePerKg; // 1 DAU = 1 kg of gold
