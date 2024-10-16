@@ -1,17 +1,19 @@
 async function convertDAUtoUSD() {
     const dauAmount = document.getElementById('dauInput').value;
-    const loadingMessage = document.getElementById('loading');
-    const resultMessage = document.getElementById('result');
-
+    const resultDiv = document.getElementById('result');
+    const loadingDiv = document.getElementById('loading');
+    
     // Show loading message
-    loadingMessage.style.display = 'block';
-    resultMessage.innerText = ''; // Clear previous result
+    loadingDiv.style.display = 'block';
+    resultDiv.innerText = ''; // Clear previous result
 
     try {
+        // Fetch the current price of gold from the API
         const response = await fetch('https://www.goldapi.io/api/XAU/USD', {
+            method: 'GET',
             headers: {
-                'x-access-token': 'goldapi-3qag3sm2b9l6hg-io'
-            }
+                'x-access-token': 'goldapi-3qag3sm2b9l6hg-io',
+            },
         });
 
         if (!response.ok) {
@@ -19,18 +21,16 @@ async function convertDAUtoUSD() {
         }
 
         const data = await response.json();
-        const goldPricePerKg = data.price; // Get the gold price per kg
-        const conversionRate = goldPricePerKg; // 1 DAU = 1kg of gold
-        const usdAmount = dauAmount * conversionRate;
+        const goldPricePerKg = data.price; // Gold price in USD for 1 kg
 
-        // Format the USD amount
-        const formattedUsdAmount = usdAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-
-        resultMessage.innerText = `${dauAmount} DAU is equal to ${formattedUsdAmount}`;
+        // Calculate the equivalent USD amount
+        const usdAmount = dauAmount * goldPricePerKg; // 1 DAU = 1 kg of gold
+        resultDiv.innerText = `${dauAmount} DAU is equal to $${usdAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })} USD`;
     } catch (error) {
-        resultMessage.innerText = 'Error fetching price: ' + error.message;
+        console.error('Error fetching gold price:', error);
+        resultDiv.innerText = 'Error fetching gold price. Please try again later.';
     } finally {
         // Hide loading message
-        loadingMessage.style.display = 'none';
+        loadingDiv.style.display = 'none';
     }
 }
