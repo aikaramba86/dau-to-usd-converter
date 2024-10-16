@@ -12,6 +12,7 @@ async function fetchGoldPrice() {
         }
 
         const data = await response.json();
+        console.log('Gold Price per Ounce:', data.price); // Log the fetched price
         return data.price; // Assuming the price comes back in a field called "price"
     } catch (error) {
         console.error('Failed to fetch gold price:', error);
@@ -20,22 +21,24 @@ async function fetchGoldPrice() {
 }
 
 async function convertDAUtoUSD() {
-    const dauAmount = document.getElementById('dauInput').value; // Get the DAU amount from input
-    const conversionRatePerOunce = await fetchGoldPrice(); // Fetch current gold price in USD per ounce
+    const dauAmount = document.getElementById('dauInput').value;
 
-    if (conversionRatePerOunce === null) {
-        document.getElementById('result').innerText = 'Error fetching gold price.';
-        return; // Exit the function if there was an error fetching the price
+    // Fetch the current gold price
+    const conversionRate = await fetchGoldPrice();
+    if (!conversionRate) {
+        document.getElementById('result').innerText = 'Error fetching gold price';
+        return;
     }
 
-    // Convert the price from ounces to kilograms (1 kg = 35.274 ounces)
-    const conversionRatePerKg = conversionRatePerOunce * 35.274; // Price for 1 kg of gold
+    // Convert from ounces to kilograms
+    const pricePerKg = conversionRate * 35.274; // Conversion factor from ounces to kg
+    const usdAmount = dauAmount * pricePerKg; // Calculate the USD amount
 
-    const usdAmount = dauAmount * conversionRatePerKg; // Calculate USD amount for DAU
-    const formattedAmount = usdAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    // Format the USD amount with commas
+    const formattedUSD = usdAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
-    document.getElementById('result').innerText = `${dauAmount} DAU is equivalent to ${formattedAmount} USD`; // Display result
+    document.getElementById('result').innerText = `${dauAmount} DAU is equal to ${formattedUSD}`;
 }
 
-// To handle the button click
-document.getElementById('convertButton').onclick = convertDAUtoUSD;
+// Optional: Add an event listener for the button if you're not using inline onclick in HTML
+document.getElementById('convertButton').addEventListener('click', convertDAUtoUSD);
