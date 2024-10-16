@@ -24,7 +24,7 @@ async function convertDAUtoUSD() {
         const goldPricePerOunce = data.price; // Price for 1 ounce of gold in USD
 
         // Calculate the price for 1 kg of gold
-        const ouncesInKg = 35.274; // 1 kg = 35.274 ounces
+        const ouncesInKg = 32.1507; // 1 kg = 32.1507 ounces
         const goldPricePerKg = goldPricePerOunce * ouncesInKg; // Price for 1 kg of gold
 
         // Calculate the equivalent USD amount
