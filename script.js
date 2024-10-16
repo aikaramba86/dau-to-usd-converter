@@ -29,9 +29,10 @@ async function convertDAUtoUSD() {
     }
 
     const usdAmount = dauAmount * conversionRate; // Calculate USD amount
-
-    // Format the USD amount with commas and two decimal places
     const formattedAmount = usdAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
-    document.getElementById('result').innerText = `${dauAmount} DAU is equal to ${formattedAmount}`; // Display result
+    document.getElementById('result').innerText = `${dauAmount} DAU is equivalent to ${formattedAmount} USD`; // Display result
 }
+
+// To handle the button click
+document.getElementById('convertButton').onclick = convertDAUtoUSD;
