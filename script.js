@@ -3,7 +3,7 @@ async function fetchGoldPrice() {
         const response = await fetch('https://www.goldapi.io/api/XAU/USD', {
             method: 'GET',
             headers: {
-                'x-access-token': 'goldapi-3qag3sm2b9l6hg-io',
+                'x-access-token': 'goldapi-cc0uc6sm2cnxvyt-io', // Updated access token
             },
         });
 
