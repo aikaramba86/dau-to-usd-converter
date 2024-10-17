@@ -71,6 +71,47 @@ async function convertgDAUtoUSD() {
     }
 }
 
+// New function to fetch the current USD to ETH conversion rate
+async function fetchUSDtoETHPrice() {
+    try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        return data.ethereum.usd; // Price of 1 ETH in USD
+    } catch (error) {
+        console.error('Error fetching ETH price:', error);
+        throw error; // Re-throw the error to handle it in the calling function
+    }
+}
+
+// Function to convert USD to ETH
+async function convertUSDtoETH() {
+    const usdAmount = document.getElementById('usdInput').value;
+    const resultDivETH = document.getElementById('resultETH');
+    const loadingDiv = document.getElementById('loadingETH');
+
+    // Show loader
+    loadingDiv.style.display = 'block';
+    resultDivETH.innerText = ''; // Clear previous result
+
+    try {
+        const ethPriceInUSD = await fetchUSDtoETHPrice();
+        const ethAmount = usdAmount / ethPriceInUSD; // Convert USD to ETH
+
+        resultDivETH.innerText = `$${usdAmount} USD is equal to ${ethAmount.toFixed(6)} ETH`;
+    } catch (error) {
+        resultDivETH.innerText = 'Error fetching ETH price. Please try again later.';
+    } finally {
+        // Hide loader
+        loadingDiv.style.display = 'none';
+    }
+}
+
 // Add event listeners to buttons
 document.getElementById('convertDAUButton').addEventListener('click', convertDAUtoUSD);
 document.getElementById('convertgDAUButton').addEventListener('click', convertgDAUtoUSD);
+document.getElementById('convertUSDtoETHButton').addEventListener('click', convertUSDtoETH);
